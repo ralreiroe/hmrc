@@ -8,10 +8,10 @@ class ShopTillTest extends FlatSpec with Matchers {
     def o = Orange(25)
 
     val appleOffer2For1: List[HasPrice] => HasPrice => Int = basket => prod => {
-      PriceFunctions._priceXForY(basket.count(_.equals(a)), prod, 2, 1)
+      PriceFunctions.priceXForY(basket, prod, 2, 1)
     }
     val orangeOffer3For2: List[HasPrice] => HasPrice => Int = basket => prod => {
-      PriceFunctions._priceXForY(basket.count(_.equals(o)), prod, 3, 2)
+      PriceFunctions.priceXForY(basket, prod, 3, 2)
     }
 
     def shop = new Shop(Map(a -> appleOffer2For1, o -> orangeOffer3For2))
@@ -28,14 +28,11 @@ class ShopTillTest extends FlatSpec with Matchers {
     def a = Apple(60)
     def o = Orange(25)
 
-    val noAppleOffer: List[HasPrice] => HasPrice => Int = basket => prod => {
-      basket.count(_.equals(a)) * prod.priceInPence
-    }
-    val noOrangeOffer: List[HasPrice] => HasPrice => Int = basket => prod => {
-      PriceFunctions._priceXForY(basket.count(_.equals(o)), prod, 1, 1)
+    val normalPriced: List[HasPrice] => HasPrice => Int = basket => prod => {
+      basket.count(_.equals(prod)) * prod.priceInPence
     }
 
-    def shop = new Shop(Map(a -> noAppleOffer, o -> noOrangeOffer))
+    def shop = new Shop(Map(a -> normalPriced, o -> normalPriced))
 
     assert(shop.checkout(List(a)) == 60)
     assert(shop.checkout(List(o)) == 25)
