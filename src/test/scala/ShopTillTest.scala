@@ -14,4 +14,9 @@ class ShopTillTest extends FlatSpec with Matchers {
     assert(shop.checkout(List(a, a)) == 120)
     assert(shop.checkout(List(a, o, a, a)) == 205)
   }
+
+  "An empty basket" should "work" in {
+
+    assert(shop.checkout(List()) == 0)
+  }
 }
