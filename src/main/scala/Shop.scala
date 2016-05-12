@@ -6,9 +6,13 @@ case class Orange(priceInPence: Int) extends HasPrice
 
 class Shop {
   def checkout(basket: List[HasPrice]) = {
-    priceXForY(basket.count(_.equals(Apple(60))), Apple(60),2,1) +
-    priceXForY(basket.count(_.equals(Orange(25))), Orange(25),3,2)
+    priceXForY(basket, Apple(60),2,1) +
+    priceXForY(basket, Orange(25),3,2)
   }
 
-  def priceXForY(count: Int, hasPrice: HasPrice, leftOfFor: Int, rightOfFor: Int) = (count / leftOfFor) * hasPrice.priceInPence * rightOfFor + (count % leftOfFor) * hasPrice.priceInPence
+  private def _priceXForY(count: Int, hasPrice: HasPrice, leftOfFor: Int, rightOfFor: Int) = (count / leftOfFor) * hasPrice.priceInPence * rightOfFor + (count % leftOfFor) * hasPrice.priceInPence
+
+  def priceXForY(basket: List[HasPrice], hasPrice: HasPrice, leftOfFor: Int, rightOfFor: Int) = {
+    _priceXForY(basket.count(_.equals(hasPrice)), hasPrice, leftOfFor, rightOfFor)
+  }
 }
